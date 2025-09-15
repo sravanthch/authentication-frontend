@@ -1,0 +1,26 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.profile-card {
+  width: 400px;
+  padding: 2rem;
+}
+
+.profile-detail {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.profile-detail strong {
+  margin-right: 0.5rem;
+}
+
+.profile-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+}

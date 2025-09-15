@@ -1,0 +1,142 @@
+/* Background */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card Styling */
+.signup-card {
+  width: 400px;
+  padding: 0rem 2.5rem 5px 2.5rem; /* Adjusted top padding */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  text-align: center;
+}
+
+/* Title and Subtitle */
+.signup-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0; 
+  color: #333;
+  font-weight: bold;
+}
+
+.signup-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-weight: normal;
+}
+
+/* Input Fields */
+.p-field {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.p-field label {
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.p-inputtext,
+.p-password input {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+}
+
+/* Password Field Wrapper */
+.password-field {
+  position: relative;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.custom-password-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+}
+
+.custom-password-input:focus {
+  border-color: #5a67d8;
+  box-shadow: 0 0 0 2px rgba(90, 103, 216, 0.2);
+}
+
+/* Eye Icon Styling */
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.p-inputtext:focus,
+.p-password input:focus {
+  border-color: #5a67d8;
+  box-shadow: 0 0 0 2px rgba(90, 103, 216, 0.2);
+}
+
+/* Button */
+.signup-button {
+  width: 100%;
+  background-color: #5a67d8;
+  border: none;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.signup-button:hover {
+  background-color: #434190;
+}
+
+/* Login Link */
+.login-link {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  padding-right: 10px;
+}
+
+.login-link a {
+  color: #5a67d8;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+.required {
+  color: red;
+}
+
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
+}
