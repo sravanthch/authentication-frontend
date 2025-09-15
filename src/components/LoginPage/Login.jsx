@@ -11,6 +11,7 @@ import "./Login.css";
 
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../redux/userSlice";
+import config from "../../server/config";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -64,38 +65,39 @@ const LoginPage = () => {
 
   setLoading(true); // Start spinner
 
-  try {
-    const response = await fetch("http://localhost:5001/api/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
 
-    const data = await response.json();
-    console.log({ data });
+try {
+  const response = await fetch(`${config.apiBaseUrl}/user/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
 
-    if (data?.data) {
-      console.log("Login success:", data);
-      dispatch(
-        setUserDetails({
-          username: data.data.name || "",
-          email: email,
-          password: password,
-        })
-      );
-      navigate(`/home`);
-    } else {
-      console.error("Login failed:", data.message);
-      setShowDialog(true);
-    }
-  } catch (err) {
-    console.error("API error:", err);
+  const data = await response.json();
+  console.log({ data });
+
+  if (data?.data) {
+    console.log("Login success:", data);
+    dispatch(
+      setUserDetails({
+        username: data.data.name || "",
+        email: email,
+        password: password,
+      })
+    );
+    navigate(`/home`);
+  } else {
+    console.error("Login failed:", data.message);
     setShowDialog(true);
-  } finally {
-    setLoading(false); // Stop spinner
   }
+} catch (err) {
+  console.error("API error:", err);
+  setShowDialog(true);
+} finally {
+  setLoading(false); // Stop spinner
+}
 };
 
 
