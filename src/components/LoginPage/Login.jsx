@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
@@ -32,7 +32,6 @@ const LoginPage = () => {
     return emailRegex.test(email);
   };
 
-  // ✅ New: Combined form validation function
   const validateForm = () => {
     let valid = true;
 
@@ -59,47 +58,44 @@ const LoginPage = () => {
   };
 
   const handleLogin = async () => {
-  const isValid = validateForm();
+    const isValid = validateForm();
 
-  if (!isValid) return;
+    if (!isValid) return;
 
-  setLoading(true); // Start spinner
+    setLoading(true); 
 
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-try {
-  const response = await fetch(`${config.apiBaseUrl}/user/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  });
+      const data = await response.json();
+      console.log({ data });
 
-  const data = await response.json();
-  console.log({ data });
-
-  if (data?.data) {
-    console.log("Login success:", data);
-    dispatch(
-      setUserDetails({
-        username: data.data.name || "",
-        email: email,
-        password: password,
-      })
-    );
-    navigate(`/home`);
-  } else {
-    console.error("Login failed:", data.message);
-    setShowDialog(true);
-  }
-} catch (err) {
-  console.error("API error:", err);
-  setShowDialog(true);
-} finally {
-  setLoading(false); // Stop spinner
-}
-};
-
+      if (data?.data) {
+        console.log("Login success:", data);
+        dispatch(
+          setUserDetails({
+            username: data.data.name || "",
+            email: email,
+            password: password,
+          })
+        );
+        navigate(`/home`);
+      } else {
+        setShowDialog(true);
+      }
+    } catch (err) {
+      console.error("API error:", err);
+      setShowDialog(true);
+    } finally {
+      setLoading(false); // Stop spinner
+    }
+  };
 
   return (
     <div className="login-container">

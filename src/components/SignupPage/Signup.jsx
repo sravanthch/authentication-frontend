@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../redux/userSlice";
 import { Dialog } from "primereact/dialog";
-
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -19,7 +18,8 @@ const SignupPage = () => {
   const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [showDialog,setShowDialog] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const togglePassword = () => setShowPassword(!showPassword);
 
@@ -28,30 +28,9 @@ const SignupPage = () => {
     return emailRegex.test(email);
   };
 
-  const checkDuplicateEmail = async (email) => {
-    try {
-      const response = await fetch(
-        "http://localhost:5001/api/user/check-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
-
-      const result = await response.json();
-      return result?.data?.exists;
-    } catch (error) {
-      console.error("Email check error:", error);
-      return false;
-    }
-  };
-
   const handleSignup = async () => {
     let valid = true;
-
+    setIsLoading(true);
     if (!username) {
       setUsernameError("Username is required.");
       valid = false;
@@ -76,12 +55,6 @@ const SignupPage = () => {
       setPasswordError("");
     }
 
-    if (email) {
-      const isDuplicate = await checkDuplicateEmail(email);
-      valid = false;
-      isDuplicate && setShowDialog(true);
-    }
-
     if (valid) {
       try {
         const response = await fetch("http://localhost:5001/api/user", {
@@ -91,18 +64,25 @@ const SignupPage = () => {
           },
           body: JSON.stringify({ name: username, email, password }),
         });
-        if (response) {
-          dispatch(
-            setUserDetails({
-              username: username || "",
-              email: email,
-              password: password,
-            })
-          );
-          navigate(`/home`);
+        const result = await response.json();
+        if (result?.data?.isEmailExists) {
+          console.log("Response:", result);
+          setShowDialog(true);
+          return;
         }
+
+        dispatch(
+          setUserDetails({
+            username: username || "",
+            email: email,
+            password: password,
+          })
+        );
+        navigate(`/home`);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
       console.log("Signup clicked");
     }
@@ -169,6 +149,8 @@ const SignupPage = () => {
             label="Sign Up"
             className="signup-button"
             onClick={handleSignup}
+            loading={isLoading}
+            disabled={isLoading}
           />
         </div>
 
