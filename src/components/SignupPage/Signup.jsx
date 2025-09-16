@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../redux/userSlice";
 import { Dialog } from "primereact/dialog";
+import config from "../../server/config";
 
 const SignupPage = () => {
   const navigate = useNavigate();
