@@ -57,7 +57,7 @@ const SignupPage = () => {
 
     if (valid) {
       try {
-        const response = await fetch("http://localhost:5001/api/user", {
+        const response = await fetch(`${config.apiBaseUrl}/user`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
