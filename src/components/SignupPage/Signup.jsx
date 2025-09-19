@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { setUserDetails } from "../redux/userSlice";
 import { Dialog } from "primereact/dialog";
 import config from "../../server/config";
+import signupValidationSchema from "../../validations/signupValidationSchema";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -16,76 +17,66 @@ const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [usernameError, setUsernameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [errors, setErrors] = useState({});
   const [showDialog, setShowDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const togglePassword = () => setShowPassword(!showPassword);
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const validateForm = async () => {
+    try {
+      await signupValidationSchema.validate(
+        { username, email, password },
+        { abortEarly: false }
+      );
+      setErrors({});
+      return true;
+    } catch (validationErrors) {
+      const formattedErrors = {};
+      validationErrors.inner.forEach((error) => {
+        formattedErrors[error.path] = error.message;
+      });
+      setErrors(formattedErrors);
+      return false;
+    }
   };
 
   const handleSignup = async () => {
-    let valid = true;
+    const isValid = await validateForm();
+
+    if (!isValid) return;
+
     setIsLoading(true);
-    if (!username) {
-      setUsernameError("Username is required.");
-      valid = false;
-    } else {
-      setUsernameError("");
-    }
 
-    if (!email) {
-      setEmailError("Email is required.");
-      valid = false;
-    } else if (!validateEmail(email)) {
-      setEmailError("Invalid email format.");
-      valid = false;
-    } else {
-      setEmailError("");
-    }
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: username, email, password }),
+      });
 
-    if (!password) {
-      setPasswordError("Password is required.");
-      valid = false;
-    } else {
-      setPasswordError("");
-    }
+      const result = await response.json();
 
-    if (valid) {
-      try {
-        const response = await fetch(`${config.apiBaseUrl}/user`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name: username, email, password }),
-        });
-        const result = await response.json();
-        if (result?.data?.isEmailExists) {
-          console.log("Response:", result);
-          setShowDialog(true);
-          return;
-        }
-
-        dispatch(
-          setUserDetails({
-            username: username || "",
-            email: email,
-            password: password,
-          })
-        );
-        navigate(`/home`);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
+      if (result?.data?.isEmailExists) {
+        setShowDialog(true);
+        return;
       }
-      console.log("Signup clicked");
+
+      dispatch(
+        setUserDetails({
+          username: username || "",
+          email: email,
+          password: password,
+        })
+      );
+
+      navigate(`/home`);
+    } catch (error) {
+      console.log("Signup error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -105,7 +96,7 @@ const SignupPage = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            {usernameError && <small className="error">{usernameError}</small>}
+            {errors.username && <small className="error">{errors.username}</small>}
           </div>
 
           <div className="p-field">
@@ -118,7 +109,7 @@ const SignupPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {emailError && <small className="error">{emailError}</small>}
+            {errors.email && <small className="error">{errors.email}</small>}
           </div>
 
           <div className="p-field password-field">
@@ -143,7 +134,7 @@ const SignupPage = () => {
                 />
               )}
             </div>
-            {passwordError && <small className="error">{passwordError}</small>}
+            {errors.password && <small className="error">{errors.password}</small>}
           </div>
 
           <Button
@@ -160,6 +151,7 @@ const SignupPage = () => {
           <a onClick={() => navigate("/")}> Login</a>
         </div>
       </Card>
+
       <Dialog
         header="Email Error"
         visible={showDialog}

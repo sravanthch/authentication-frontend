@@ -13,56 +13,43 @@ import { useDispatch } from "react-redux";
 import { setUserDetails } from "../redux/userSlice";
 import config from "../../server/config";
 
+import loginValidationSchema from "../../validations/loginValidationSchema";
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [loading, setLoading] = useState(false);
 
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
   const togglePassword = () => setShowPassword(!showPassword);
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateForm = () => {
-    let valid = true;
-
-    // Validate email
-    if (!email) {
-      setEmailError("Email is required.");
-      valid = false;
-    } else if (!validateEmail(email)) {
-      setEmailError("Invalid email format.");
-      valid = false;
-    } else {
-      setEmailError("");
+  const validateForm = async () => {
+    try {
+      await loginValidationSchema.validate({ email, password }, { abortEarly: false });
+      setErrors({});
+      return true;
+    } catch (validationErrors) {
+      const formattedErrors = {};
+      validationErrors.inner.forEach((error) => {
+        formattedErrors[error.path] = error.message;
+      });
+      setErrors(formattedErrors);
+      return false;
     }
-
-    // Validate password
-    if (!password) {
-      setPasswordError("Password is required.");
-      valid = false;
-    } else {
-      setPasswordError("");
-    }
-
-    return valid;
   };
 
   const handleLogin = async () => {
-    const isValid = validateForm();
+    const isValid = await validateForm();
 
     if (!isValid) return;
 
-    setLoading(true); 
+    setLoading(true);
 
     try {
       const response = await fetch(`${config.apiBaseUrl}/user/login`, {
@@ -74,10 +61,8 @@ const LoginPage = () => {
       });
 
       const data = await response.json();
-      console.log({ data });
 
       if (data?.data) {
-        console.log("Login success:", data);
         dispatch(
           setUserDetails({
             username: data.data.name || "",
@@ -93,7 +78,7 @@ const LoginPage = () => {
       console.error("API error:", err);
       setShowDialog(true);
     } finally {
-      setLoading(false); // Stop spinner
+      setLoading(false);
     }
   };
 
@@ -113,7 +98,7 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {emailError && <small className="error">{emailError}</small>}
+            {errors.email && <small className="error">{errors.email}</small>}
           </div>
 
           <div className="p-field password-field">
@@ -138,7 +123,7 @@ const LoginPage = () => {
                 />
               )}
             </div>
-            {passwordError && <small className="error">{passwordError}</small>}
+            {errors.password && <small className="error">{errors.password}</small>}
           </div>
 
           <Button
@@ -164,7 +149,7 @@ const LoginPage = () => {
         >
           <p>
             Please check your username and password, or sign up if you don't
-            have an account."
+            have an account.
           </p>
           <Button
             label="Ok"
