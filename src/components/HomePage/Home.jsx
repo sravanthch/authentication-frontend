@@ -11,7 +11,8 @@ import 'primeicons/primeicons.css';
 const Home = () => {
   const navigate = useNavigate();
 
-  const username = useSelector((state) => state.user.username);
+  // const username = useSelector((state) => state.user.username);
+  const username = localStorage.getItem('username')
 
   const logout = () => {
     navigate("/");

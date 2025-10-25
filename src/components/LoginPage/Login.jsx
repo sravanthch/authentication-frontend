@@ -63,13 +63,14 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (data?.data) {
-        dispatch(
-          setUserDetails({
-            username: data.data.name || "",
-            email: email,
-            password: password,
-          })
-        );
+        // dispatch(
+        //   setUserDetails({
+        //     username: data.data.name || "",
+        //     email: email,
+        //     password: password,
+        //   })
+        // );
+        localStorage.setItem('username',data.data.name)
         navigate(`/home`);
       } else {
         setShowDialog(true);
