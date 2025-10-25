@@ -24,3 +24,12 @@
   display: flex;
   justify-content: space-between;
 }
+
+.profile-actions .p-button-primary,
+.profile-actions .p-button-secondary {
+  margin-right: 1rem; /* Adjust the value as needed */
+}
+
+.profile-actions .p-button-secondary {
+  margin-right: 0; /* Remove margin from the last button */
+}
