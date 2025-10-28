@@ -72,6 +72,7 @@ const LoginPage = () => {
         // );
         localStorage.setItem('username',data.data.name)
         localStorage.setItem('email',email)
+        localStorage.setItem('password',password)
         navigate(`/home`);
       } else {
         setShowDialog(true);
