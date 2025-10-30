@@ -11,7 +11,7 @@ const Profile = () => {
   const onChangePasswordClick = () => {
     setIsChangePassword(true);
   }
-
+  console.log(isChangePassword)
   return (
     <div className="profile-container">
       <Card title="My Profile" className="profile-card">
@@ -23,7 +23,7 @@ const Profile = () => {
         </div>
 
         <div className="profile-actions">
-          <Button label="Change Password" icon="pi pi-lock" className="p-button-secondary" />
+          <Button label="Change Password" onClick={onChangePasswordClick} icon="pi pi-lock" className="p-button-secondary" />
         </div>
       </Card>
     </div>
