@@ -6,7 +6,7 @@ import "./Profile.css"; // create your own styles if needed
 
 const Profile = () => {
   // const { username, email, password } = useSelector((state) => state.user);
-  const { password } = useSelector((state) => state.user);
+  // const { password } = useSelector((state) => state.user);
 
 
   return (
@@ -18,12 +18,8 @@ const Profile = () => {
         <div className="profile-detail">
           <strong>Email:</strong> <span>{localStorage.getItem('email')}</span>
         </div>
-        <div className="profile-detail">
-          <strong>Password:</strong> <span>{'*'.repeat(password.length)}</span>
-        </div>
 
         <div className="profile-actions">
-          <Button label="Edit Profile" icon="pi pi-user-edit" className="p-button-primary" />
           <Button label="Change Password" icon="pi pi-lock" className="p-button-secondary" />
         </div>
       </Card>
