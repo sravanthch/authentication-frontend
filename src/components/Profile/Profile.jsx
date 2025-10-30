@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
@@ -7,7 +7,10 @@ import "./Profile.css"; // create your own styles if needed
 const Profile = () => {
   // const { username, email, password } = useSelector((state) => state.user);
   // const { password } = useSelector((state) => state.user);
-
+  const [isChangePassword, setIsChangePassword] = useState(false)
+  const onChangePasswordClick = () => {
+    setIsChangePassword(true);
+  }
 
   return (
     <div className="profile-container">
