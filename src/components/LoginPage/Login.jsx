@@ -61,6 +61,7 @@ const LoginPage = () => {
       });
 
       const data = await response.json();
+      console.log({data})
 
       if (data?.data) {
         // dispatch(
@@ -70,6 +71,7 @@ const LoginPage = () => {
         //     password: password,
         //   })
         // );
+        localStorage.setItem('id',data?.data.id)
         localStorage.setItem('username',data.data.name)
         localStorage.setItem('email',email)
         localStorage.setItem('password',password)
