@@ -27,6 +27,12 @@ const Profile = () => {
     setIsEditing(false);
   };
 
+  const handleChangePasswordClick = () => {
+    // Placeholder action — replace with real navigation/modal as needed
+    // For now show a simple alert to indicate the button works
+    alert("Change Password clicked — implement your flow (modal or route).");
+  };
+
   return (
     <div className="profile-container">
       <Card title="My Profile" className="profile-card">
@@ -74,6 +80,11 @@ const Profile = () => {
                 label="Edit" 
                 onClick={handleEditClick} 
                 className="p-button-warning" 
+              />
+              <Button
+                label="Change Password"
+                onClick={handleChangePasswordClick}
+                className="p-button-info change-password-btn"
               />
             </div>
           </div>

@@ -6,7 +6,7 @@
 }
 
 .profile-card {
-  width: 400px;
+  width: 520px; /* increased width as requested */
   padding: 2rem;
 }
 
@@ -22,14 +22,25 @@
 .profile-actions {
   margin-top: 2rem;
   display: flex;
-  justify-content: space-between;
+  gap: 0.75rem; /* spacing between buttons */
+  justify-content: flex-start;
+  flex-wrap: wrap; /* allow buttons to wrap on small screens */
 }
 
-.profile-actions .p-button-primary,
-.profile-actions .p-button-secondary {
-  margin-right: 1rem; /* Adjust the value as needed */
+/* spacing handled by .profile-actions gap */
+
+.change-password-btn {
+  min-width: 160px; /* make the change password button slightly wider */
 }
 
-.profile-actions .p-button-secondary {
-  margin-right: 0; /* Remove margin from the last button */
+/* Make buttons full width on very small screens */
+@media (max-width: 480px) {
+  .profile-card {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .change-password-btn {
+    width: 100%;
+  }
 }
