@@ -39,15 +39,16 @@ const Profile = () => {
         {isEditing ? (
           <div className="profile-edit">
             <div className="form-group">
-              <label htmlFor="username">Name:</label>
+              <b><label htmlFor="username">Name:</label></b>
               <InputText 
                 id="username" 
                 value={username} 
                 onChange={(e) => setUsername(e.target.value)} 
               />
             </div>
+
             <div className="form-group">
-              <label htmlFor="email">Email:</label>
+              <b><label htmlFor="email">Email:</label></b>
               <InputText 
                 id="email" 
                 value={email} 
