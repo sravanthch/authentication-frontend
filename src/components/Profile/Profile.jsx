@@ -3,11 +3,13 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext"; // Import InputText for form fields
 import "./Profile.css"; // create your own styles if needed
+import ChangePassword from "../ChangePassword/ChangePassword";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [username, setUsername] = useState(localStorage.getItem('username') || '');
   const [email, setEmail] = useState(localStorage.getItem('email') || '');
+  const [isChangingPassword,setIsChangingPassword] = useState(false)
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -26,17 +28,16 @@ const Profile = () => {
     setEmail(localStorage.getItem('email') || '');
     setIsEditing(false);
   };
-
   const handleChangePasswordClick = () => {
-    // Placeholder action — replace with real navigation/modal as needed
-    // For now show a simple alert to indicate the button works
-    alert("Change Password clicked — implement your flow (modal or route).");
+    setIsChangingPassword(true);
   };
 
   return (
     <div className="profile-container">
       <Card title="My Profile" className="profile-card">
-        {isEditing ? (
+        {isChangingPassword ? (
+          <ChangePassword onCancel={() => setIsChangingPassword(false)} />
+        ) : isEditing ? (
           <div className="profile-edit">
             <div className="form-group">
               <b><label htmlFor="username">Name:</label></b>
@@ -56,11 +57,11 @@ const Profile = () => {
               />
             </div>
             <div className="profile-actions">
-              <Button 
-                label="Save" 
-                onClick={handleSaveClick} 
-                className="p-button-success" 
-              />
+                <Button
+                  label="Save"
+                  onClick={handleSaveClick}
+                  className="p-button-success"
+                />
               <Button 
                 label="Cancel" 
                 onClick={handleCancelClick} 
