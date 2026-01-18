@@ -8,7 +8,7 @@ Users can log in **only if they have previously signed up**, with authentication
 ## 🚀 Live Demo
 
 🔗 Deployed Application:  
-https://your-deployed-app-link.com
+https://whimsical-griffin-cf1e2e.netlify.app/
 
 > Replace this with your actual deployment URL (Vercel / Netlify / Render).
 
